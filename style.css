@@ -1,0 +1,291 @@
+/* General Layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+/* Side Menu */
+/* Side Menu */
+.side-menu {
+    width: 150px;
+    /* Consistent width */
+    background-color: #3498db;
+    /* Consistent background color */
+    color: white;
+    height: 125vh;
+    /* Full viewport height */
+    padding: 20px;
+    /* Padding adjusted */
+    box-sizing: border-box;
+}
+
+.logo h2 {
+    margin: 0;
+    text-align: center;
+    background-color: #2980b9;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    padding: 15px;
+    text-align: center;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+nav ul li a:hover {
+    background-color: #1abc9c;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Main Dashboard */
+.dashboard {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f0f0f0;
+    position: relative;
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#city-input {
+    padding: 15px;
+    width: 250px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#get-weather-btn {
+    padding: 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Weather Data Card */
+.weather-data-card {
+    background-color: #ffffff;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-image 0.5s ease-in-out;
+    /* Animation for smooth background change */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Weather Icon */
+#weather-icon {
+    width: 100px;
+    height: 100px;
+}
+
+/* User Profile Link */
+.user-profile {
+    position: absolute;
+    right: 20px;
+    top: 24px;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+}
+
+/* Style for the chart container */
+.charts-container {
+    display: flex;
+    flex-direction: row;
+    /* Aligns charts horizontally */
+    justify-content: space-between;
+    /* Creates spacing between the charts */
+    margin-top: 20px;
+}
+
+/* Style for each chart card */
+.chart-box {
+    width: 30%;
+    /* Make each chart take 30% of the parent container width */
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    /* Set equal height for all chart cards */
+    margin-right: 10px;
+    /* Space between each chart card */
+}
+
+/* Remove margin for the last chart box */
+.chart-box:last-child {
+    margin-right: 0;
+}
+
+/* Make the canvas responsive inside each chart box */
+canvas {
+    width: 100% !important;
+    /* Ensure canvas fills the container */
+    height: 100% !important;
+}
+
+/* Weather background image classes */
+.clear-weather {
+    background-image: url('path/to/clear-sky-image.jpg');
+    background-size: cover;
+}
+
+.cloudy-weather {
+    background-image: url('path/to/cloudy-sky-image.jpg');
+    background-size: cover;
+}
+
+.rainy-weather {
+    background-image: url('path/to/rainy-weather-image.jpg');
+    background-size: cover;
+}
+
+.default-weather {
+    background-color: #f0f0f0;
+    /* Fallback background */
+}
+
+/* Add these styles for better visibility */
+.weather-data-card h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.weather-data-card p {
+    font-size: 1.1em;
+    color: #555;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.weather-data-card img {
+    display: block;
+    margin: 10px auto;
+}
+
+#weather-icon {
+    width: 80px;
+    /* Set a width for the icon */
+    height: 80px;
+    /* Set a height for the icon */
+    display: block;
+    margin: 0 auto;
+    /* Center the icon */
+}
+
+/* General Layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+/* Side Menu */
+.side-menu {
+    width: 200px;
+    background-color: #3498db;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* Show by default on large screens */
+    transition: left 0.3s ease-in-out;
+    z-index: 100;
+}
+
+/* Side Menu hidden on smaller screens by default */
+@media screen and (max-width: 768px) {
+    .side-menu {
+        left: -200px;
+        /* Hide off-screen */
+    }
+
+    /* When the "open" class is added, show the menu */
+    .side-menu.open {
+        left: 0;
+    }
+}
+
+/* Hamburger Menu */
+.hamburger-menu {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 101;
+    /* Higher than side-menu */
+    color: #3498db;
+}
+
+/* Show hamburger on small screens */
+@media screen and (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+    }
+}
+
+/* Main Dashboard */
+.dashboard {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f0f0f0;
+    margin-left: 200px;
+    /* Give space for side menu on large screens */
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* Adjust margin when side-menu is hidden on small screens */
+@media screen and (max-width: 768px) {
+    .dashboard {
+        margin-left: 0;
+        /* No margin for hidden side-menu */
+    }
+
+    /* Adjust when side-menu is opened */
+    .side-menu.open+.dashboard {
+        margin-left: 200px;
+        /* Adjust when side menu is open */
+    }
+}

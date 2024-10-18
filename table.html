@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Data Table with Chat</title>
+    <link rel="stylesheet" href="table.css">
+
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 101;
+            position: fixed;
+            left: 10px;
+            top: 10px;
+        }
+
+        .hamburger-menu img {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Side Menu */
+        .side-menu {
+            width: 200px;
+            background-color: #3498db;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            position: fixed;
+            transition: left 0.3s ease-in-out;
+            left: 0;
+            top: 0;
+        }
+
+        /* Side Menu hidden on smaller screens */
+        @media screen and (max-width: 768px) {
+            .side-menu {
+                left: -200px;
+            }
+
+            .side-menu.open {
+                left: 0;
+            }
+
+            .hamburger-menu {
+                display: block;
+            }
+        }
+
+        /* Logo */
+        .weather-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffffff 30%, #e0e0e0 100%);
+            padding: 5px;
+            border: 2px solid #007bff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 123, 255, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Center the logo and adjust padding */
+        .side-menu .logo {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        /* Hover effect for the logo */
+        .weather-logo:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        /* Main Dashboard Layout */
+        .table-layout {
+            margin-left: 220px;
+            padding: 20px;
+            width: calc(100% - 220px);
+            transition: margin-left 0.3s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        @media screen and (max-width: 768px) {
+            .table-layout {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .side-menu.open+.table-layout {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            flex-grow: 1;
+            display: flex;
+        }
+
+        .search-container input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 70%;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Card Layout */
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-left: 10px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: calc(50% - 10px);
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Card Layout */
+        @media screen and (max-width: 768px) {
+            .card {
+                width: 100%;
+            }
+        }
+
+        /* Weather Data Table */
+        .data-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Chatbot */
+        .chat-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .chat-log {
+            border: 1px solid #ddd;
+            height: 250px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chat-input-area input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .chat-input-area button {
+            width: 18%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu" onclick="toggleSidebar()">
+        <img src="hamburger.svg" alt="Hamburger Menu">
+    </div>
+
+    <!-- Side Menu -->
+    <aside class="side-menu">
+        <div class="logo">
+            <a href="index.html">
+                <img src="logo.jpeg" alt="Weather App Logo" class="weather-logo" width="80px" height="80px">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="table.html">Tables</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="table-layout">
+        <!-- Top Bar containing Search and User Profile -->
+        <div class="top-bar">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" id="city-search" placeholder="Search city...">
+                <button id="search-btn">Search</button>
+            </div>
+            <!-- User Profile on the right -->
+            <a href="userProfile.html" id="user-profile" class="user-profile">User Profile</a>
+        </div>
+
+        <!-- Container for the two cards -->
+        <div class="card-container">
+            <!-- Card for Weather Data Table -->
+            <div class="card">
+                <h3>Weather Data Table</h3>
+
+                <!-- Filter buttons -->
+                <div class="filter-buttons">
+                    <button id="sort-asc">Sort by Temp Ascending</button>
+                    <button id="sort-desc">Sort by Temp Descending</button>
+                    <button id="filter-rainy-days">Show Only Rainy Days</button>
+                    <button id="hottest-day">Show Hottest Day</button>
+                </div>
+
+                <div class="data-table">
+                    <table id="weather-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>City</th>
+                                <th>Temperature</th>
+                                <th>Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Add Unit Conversion Toggle Button -->
+                <div class="filter-buttons">
+                    <button id="toggle-units">Show in Fahrenheit</button>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="loading-spinner" style="display:none;">
+                    <img src="loading.gif" alt="Loading..." />
+                </div>
+            </div>
+
+            <div class="card chatbot-container">
+                <div class="chat-header">Chatbot</div>
+                <div id="chatMessages" class="chat-log">Chat logs here</div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Ask a question...">
+                    <button id="sendMessage">Send</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="table.js"></script>
+    <script src="chat.js"></script>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.side-menu');
+            sidebar.classList.toggle('open');
+        }
+    </script>
+
+</body>
+
+</html>
